@@ -46,7 +46,7 @@ public class ThreadRicezione extends Thread {
                 String messaggioRicevuto =  new String(receivePacket.getData(), 0, receivePacket.getLength());
                 String[] campi= messaggioRicevuto.split(";");
                 condivisa.setUltimoTag(campi[0]);
-                
+                condivisa.setCheckLetto(Boolean.FALSE);
                 
                 System.out.println(messaggioRicevuto + "\"\n");
                 

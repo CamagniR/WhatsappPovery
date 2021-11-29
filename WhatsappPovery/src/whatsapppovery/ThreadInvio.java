@@ -30,7 +30,7 @@ public class ThreadInvio extends Thread  {
         condivisa=c;
         
         // Creo DatagramSocket
-        this.udpClientSocket = new DatagramSocket();
+        this.udpClientSocket = new DatagramSocket(clientport);
         this.udpClientSocket.connect(destinationIPAddress, clientport);
     }
  
@@ -44,7 +44,9 @@ public class ThreadInvio extends Thread  {
             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
             while (true) 
             {
-               
+                if (condivisa.getChatIniziata()==Boolean.FALSE) {
+                    
+              
                 String clientMessage="";
                 if (condivisa.getUltimoTag().equals("")) {
                     System.out.println("inserisci il tuo nickname ");
@@ -56,6 +58,7 @@ public class ThreadInvio extends Thread  {
                      if (clientMessage.equals("y")) {
                     System.out.println("inserisci il tuo nickname? ");
                     String nicknameLocale= userInput.readLine();
+                    condivisa.setChatIniziata(Boolean.TRUE);
                     
                     //invio all'altro peer
                     clientMessage= clientMessage+";"+nicknameLocale;
@@ -81,7 +84,10 @@ public class ThreadInvio extends Thread  {
                      clientMessage="m;"+userInput.readLine();
                }else if(clientMessage.equals("e"))
                {
-                    //Stop();
+                   condivisa.setChatIniziata(Boolean.FALSE);
+                   condivisa.setUltimoTag("");
+                   condivisa.setCheckLetto(Boolean.FALSE);
+                    stoppa();
                }
                 }
                 
@@ -90,13 +96,19 @@ public class ThreadInvio extends Thread  {
                 sendData = clientMessage.getBytes();
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, destinationIPAddress, clientport);
                 udpClientSocket.send(sendPacket);
-                    
+                condivisa.setCheckLetto(Boolean.TRUE);
                 Thread.yield();
             }
+           }
         }
         catch (IOException ex) {
             System.err.println(ex);
         }
     }
-    
+    public void stoppa() {
+    if (udpClientSocket != null) {
+        udpClientSocket.close();
+        udpClientSocket = null;
+    }
+}
 }

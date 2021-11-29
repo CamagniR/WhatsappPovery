@@ -5,6 +5,9 @@
  */
 package whatsapppovery;
 
+import java.util.concurrent.Semaphore;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Riccardo
@@ -12,22 +15,45 @@ package whatsapppovery;
 public class Condivisa {
     
     private String ultimoTag;
-
-     public Condivisa() {
+    private Boolean checkLetto;
+    private Boolean chatIniziata;
+    
+    public Condivisa() {
         ultimoTag = "";
+        checkLetto=false;
+        chatIniziata=false;
+        
     }
      
-     public Condivisa(String ultimoTag) {
+    public Condivisa(String ultimoTag) {
         this.ultimoTag = ultimoTag;
     }
     
-    public String getUltimoTag() {
+    public synchronized String getUltimoTag() {
+        
         return ultimoTag;
     }
 
-    public void setUltimoTag(String ultimoTag) {
+    public synchronized void setUltimoTag(String ultimoTag) {
         this.ultimoTag = ultimoTag;
     }
+
+    public synchronized Boolean getCheckLetto() {
+        return checkLetto;
+    }
+
+    public synchronized void setCheckLetto(Boolean checkLetto) {
+        this.checkLetto = checkLetto;
+    }
+
+    public synchronized Boolean getChatIniziata() {
+        return chatIniziata;
+    }
+
+    public synchronized void setChatIniziata(Boolean chatIniziata) {
+        this.chatIniziata = chatIniziata;
+    }
+   
 
    
     
